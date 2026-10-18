@@ -1,0 +1,8 @@
+# Evita subir archivos generados automáticamente por Python.
+__pycache__/
+*.pyc
+
+# Evita subir entornos y configuraciones locales que no pertenecen al proyecto.
+.venv/
+.vscode/
+.idea/
