@@ -1,6 +1,8 @@
 # Persona contiene la información común de estudiantes, docentes y administrativos.
 
-class Persona:  # Define la clase base que reutilizarán los tres tipos de personas.
+from abc import ABC, abstractmethod  # Permite definir clases y métodos abstractos.
+
+class Persona(ABC):  # Define una clase abstracta que no puede instanciarse directamente.
     def __init__(self, identificacion, nombre, correo):  # Inicializa los datos de una nueva persona.
         self.__identificacion = identificacion  # Guarda la identificación como atributo encapsulado.
         self.__nombre = nombre  # Guarda el nombre como atributo encapsulado.
@@ -26,5 +28,6 @@ class Persona:  # Define la clase base que reutilizarán los tres tipos de perso
         print("Nombre:", self.__nombre)  # Muestra el nombre de esta persona.
         print("Correo:", self.__correo)  # Muestra el correo actual de esta persona.
 
-    def realizar_actividad_principal(self):  # Define un comportamiento general que las clases hijas sobrescriben.
-        print("Actividad: participa en la comunidad académica.")  # Muestra la actividad general de una persona.
+    @abstractmethod  # Obliga a las clases concretas a implementar su actividad principal.
+    def realizar_actividad_principal(self):  # Declara la actividad que cada clase hija debe definir.
+        pass  # El comportamiento se implementa en Estudiante, Docente y Administrativo.
