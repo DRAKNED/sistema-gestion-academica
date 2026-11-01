@@ -4,6 +4,7 @@ from programa_academico import ProgramaAcademico  # Importa la clase que represe
 from asignatura import Asignatura  # Importa la clase que representa las asignaturas.
 from estudiante import Estudiante  # Importa la clase hija que representa los estudiantes.
 from docente import Docente  # Importa la clase hija que representa los docentes.
+from grupo_academico import GrupoAcademico  # AC2: incorpora los grupos que crean su propio horario.
 from administrativo import Administrativo  # Importa la clase hija que representa los administrativos.
 from entradas import leer_texto, leer_entero, leer_entero_positivo, leer_promedio  # Importa las lecturas de teclado.
 from entradas import esperar_volver  # Importa la espera para volver al menú anterior.
@@ -206,7 +207,19 @@ def modificar_datos(programas, asignaturas, personas):  # Mantiene disponibles l
             print("Operación rechazada:", error)  # Explica que el dato anterior no fue reemplazado.
         esperar_volver()  # Mantiene visible el resultado o rechazo hasta elegir volver a este submenú.
 
-def ejecutar_menu(programas, asignaturas, personas):  # Trabaja con las mismas listas creadas en main.
+# AC2: consulta agregada; conserva las funciones de consulta de la primera actividad.
+def mostrar_grupos(grupos):  # Presenta los grupos, sus horarios y sus estudiantes.
+    print("\n--- GRUPOS ACADÉMICOS ---")  # Identifica la nueva consulta.
+    if not grupos:  # También permite consultar una colección sin grupos.
+        print("No hay grupos académicos registrados.")  # Explica por qué no se muestran registros.
+    for grupo in grupos:  # Recorre los objetos creados en main.
+        grupo.mostrar_informacion_grupo()  # Muestra la asignatura, el docente, los cupos y el horario.
+        grupo.mostrar_estudiantes()  # Informa el estado de las matrículas del grupo.
+    esperar_volver()  # Conserva la misma navegación de las consultas anteriores.
+
+def ejecutar_menu(programas, asignaturas, personas, grupos=None):  # AC2: añade grupos como argumento opcional.
+    if grupos is None:  # Mantiene compatibles las llamadas anteriores que solo pasan tres listas.
+        grupos = []  # Usa una lista nueva por llamada cuando no se suministran grupos.
     while True:  # Mantiene el menú disponible hasta que el usuario seleccione salir.
         print("\n=== MENÚ PRINCIPAL ===")  # Separa cada presentación del menú.
         print("1. Consultar programas académicos")  # Muestra la opción de consultar programas.
@@ -216,6 +229,7 @@ def ejecutar_menu(programas, asignaturas, personas):  # Trabaja con las mismas l
         print("5. Registrar asignatura")  # Muestra la opción de crear una asignatura.
         print("6. Registrar estudiante, docente o administrativo")  # Muestra la opción de crear una persona.
         print("7. Modificar datos")  # Muestra la opción de modificar los datos permitidos.
+        print("8. Consultar grupos académicos y horarios")  # AC2: añade la consulta sin renumerar las opciones originales.
         print("0. Salir")  # Muestra la opción que finaliza la ejecución.
         opcion = input("Selecciona una opción: ").strip()  # Lee la opción del usuario como texto.
         try:  # Permite que las clases rechacen datos sin cerrar el programa.
@@ -233,6 +247,8 @@ def ejecutar_menu(programas, asignaturas, personas):  # Trabaja con las mismas l
                 registrar_persona(programas, personas)  # Agrega el objeto al mismo conjunto de personas.
             elif opcion == "7":  # Identifica la modificación controlada de datos.
                 modificar_datos(programas, asignaturas, personas)  # Actualiza datos mediante métodos de sus clases.
+            elif opcion == "8":  # AC2: atiende la nueva consulta de grupos.
+                mostrar_grupos(grupos)  # Utiliza los grupos de la misma ejecución.
             elif opcion == "0":  # Identifica la solicitud de terminar la sesión.
                 print("Sistema cerrado. Los datos de esta ejecución no se guardan.")  # Advierte que no hay persistencia.
                 break  # Termina el ciclo del menú y permite finalizar el programa.
@@ -314,7 +330,17 @@ def main():  # Coordina una única ejecución del sistema, cargando los objetos 
         docente_2,  # Agrega el segundo docente a la misma colección.
         administrativo_2,  # Agrega el segundo administrativo a la misma colección.
     ]  # Completa la colección con las seis personas exigidas.
-    ejecutar_menu(programas, asignaturas, personas)  # Continúa usando los mismos objetos, sin reiniciar las listas.
+    # AC2: los grupos reutilizan asignaturas y docentes existentes y crean horarios propios.
+    grupo_1 = GrupoAcademico(  # Construye el primer grupo de ejemplo.
+        "G001", asignatura_1, docente_1, 30,  # Identificador, objetos relacionados y capacidad máxima.
+        "Lunes", "08:00", "10:00", "A101",  # Datos con los que el grupo construye su Horario.
+    )  # Finaliza la creación del primer grupo sin estudiantes matriculados.
+    grupo_2 = GrupoAcademico(  # Construye el segundo grupo de ejemplo.
+        "G002", asignatura_2, docente_2, 25,  # Reutiliza la segunda asignatura y el segundo docente.
+        "Martes", "10:00", "12:00", "B202",  # Define un horario propio para el segundo grupo.
+    )  # Finaliza la creación del segundo grupo sin estudiantes matriculados.
+    grupos = [grupo_1, grupo_2]  # Conserva ambos grupos durante esta ejecución del sistema.
+    ejecutar_menu(programas, asignaturas, personas, grupos)  # AC2: pasa los grupos y conserva las listas originales.
 
 if __name__ == "__main__":  # Ejecuta main solo al iniciar este archivo y no cuando otro archivo lo importa.
     try:  # Permite terminar ordenadamente si se interrumpe la lectura de teclado.
