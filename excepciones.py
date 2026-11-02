@@ -8,3 +8,10 @@ class GrupoLlenoError(Exception):  # Indica que no hay cupos disponibles para ot
 
 class EstudianteNoMatriculadoError(Exception):  # Indica que el código solicitado no pertenece al grupo.
     pass  # Permite capturar este rechazo sin finalizar el programa.
+
+
+class AsignaturaNoEncontradaError(Exception):  # AC2: identifica una búsqueda de asignatura sin coincidencias.
+    pass  # Recibe el mensaje definido por la función que detecta la ausencia.
+
+class ProgramaNoEncontradoError(Exception):  # AC2: identifica una búsqueda de programa sin coincidencias.
+    pass  # Permite capturar el rechazo y continuar solicitando un código válido.

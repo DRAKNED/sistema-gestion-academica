@@ -5,6 +5,7 @@ from asignatura import Asignatura  # Importa la clase que representa las asignat
 from estudiante import Estudiante  # Importa la clase hija que representa los estudiantes.
 from docente import Docente  # Importa la clase hija que representa los docentes.
 from excepciones import EstudianteYaMatriculadoError, GrupoLlenoError, EstudianteNoMatriculadoError  # AC2: rechazos de matrícula y retiro.
+from excepciones import AsignaturaNoEncontradaError, ProgramaNoEncontradoError  # AC2: errores de búsqueda.
 from grupo_academico import GrupoAcademico  # AC2: incorpora los grupos que crean su propio horario.
 from administrativo import Administrativo  # Importa la clase hija que representa los administrativos.
 from entradas import leer_texto, leer_entero, leer_entero_positivo, leer_promedio  # Importa las lecturas de teclado.
@@ -30,6 +31,18 @@ def mostrar_reporte_personas(personas):  # Genera el reporte polimórfico de la 
         persona.realizar_actividad_principal()  # Ejecuta la actividad propia del mismo objeto.
     esperar_volver()  # Conserva el resultado visible hasta elegir 0 para regresar.
 
+def buscar_programa(programas, codigo):  # AC2: busca sin pedir datos ni capturar su propio error.
+    for programa in programas:  # Recorre los objetos existentes, incluso si la lista está vacía.
+        if programa.get_codigo() == codigo:  # Compara el identificador solicitado.
+            return programa  # Conserva la referencia al programa registrado.
+    raise ProgramaNoEncontradoError(f"No existe un programa académico con el código {codigo}.")  # Lanza el error donde se detecta la ausencia.
+
+def buscar_asignatura(asignaturas, codigo):  # AC2: separa la búsqueda de la interacción del menú.
+    for asignatura in asignaturas:  # Recorre los objetos sin crear ni modificar registros.
+        if asignatura.get_codigo() == codigo:  # Comprueba el código solicitado.
+            return asignatura  # Devuelve el objeto registrado, no una copia.
+    raise AsignaturaNoEncontradaError(f"No existe una asignatura con el código {codigo}.")  # Comunica el rechazo al programa que llama.
+
 def seleccionar_programa(programas):  # Busca un registro existente por su identificador.
     if len(programas) == 0:  # Comprueba si existen registros antes de solicitar una selección.
         print("No hay registros disponibles para seleccionar.")  # Informa que no puede completarse esta operación.
@@ -41,10 +54,11 @@ def seleccionar_programa(programas):  # Busca un registro existente por su ident
     while True:  # Mantiene la selección cuando el identificador ingresado no existe.
         dato = leer_texto("Código del programa")  # Solicita el identificador del registro que se desea seleccionar.
         dato = dato.upper()  # Convierte el código a mayúsculas para buscarlo.
-        for programa in programas:  # Busca la coincidencia dentro de los registros existentes.
-            if programa.get_codigo() == dato:  # Compara identificadores, no tipos de objetos.
-                return programa  # Devuelve el objeto existente en lugar de crear una copia.
-        print("No se encontró ese registro. Intenta de nuevo.")  # Conserva la selección actual.
+        try:  # AC2: la búsqueda puede lanzar una excepción personalizada.
+            return buscar_programa(programas, dato)  # Devuelve el objeto cuando el código existe.
+        except ProgramaNoEncontradoError as error:  # Captura en main.py la ausencia detectada por la búsqueda.
+            print("Operación rechazada:", error)  # Explica el motivo sin finalizar el programa.
+            print("Intenta de nuevo.")  # El ciclo permite corregir el código y continuar.
 
 def seleccionar_asignatura(asignaturas):  # Busca un registro existente por su identificador.
     if len(asignaturas) == 0:  # Comprueba si existen registros antes de solicitar una selección.
@@ -57,10 +71,11 @@ def seleccionar_asignatura(asignaturas):  # Busca un registro existente por su i
     while True:  # Mantiene la selección cuando el identificador ingresado no existe.
         dato = leer_texto("Código de la asignatura")  # Solicita el identificador del registro que se desea seleccionar.
         dato = dato.upper()  # Convierte el código a mayúsculas para buscarlo.
-        for asignatura in asignaturas:  # Busca la coincidencia dentro de los registros existentes.
-            if asignatura.get_codigo() == dato:  # Compara identificadores, no tipos de objetos.
-                return asignatura  # Devuelve el objeto existente en lugar de crear una copia.
-        print("No se encontró ese registro. Intenta de nuevo.")  # Conserva la selección actual.
+        try:  # AC2: la búsqueda puede lanzar una excepción personalizada.
+            return buscar_asignatura(asignaturas, dato)  # Devuelve el objeto cuando el código existe.
+        except AsignaturaNoEncontradaError as error:  # Captura en main.py la ausencia detectada por la búsqueda.
+            print("Operación rechazada:", error)  # Explica el motivo sin finalizar el programa.
+            print("Intenta de nuevo.")  # El ciclo permite corregir el código y continuar.
 
 def seleccionar_persona(personas):  # Busca un registro existente por su identificador.
     if len(personas) == 0:  # Comprueba si existen registros antes de solicitar una selección.
