@@ -1,5 +1,6 @@
 # Archivo principal: carga los objetos iniciales y permite operar el sistema mediante menús.
 
+from persona import Persona  # AC2: permite demostrar el rechazo de la clase abstracta al iniciar.
 from programa_academico import ProgramaAcademico  # Importa la clase que representa los programas.
 from asignatura import Asignatura  # Importa la clase que representa las asignaturas.
 from estudiante import Estudiante  # Importa la clase hija que representa los estudiantes.
@@ -347,6 +348,10 @@ def ejecutar_menu(programas, asignaturas, personas, grupos=None):  # AC2: añade
 def main():  # Coordina una única ejecución del sistema, cargando los objetos y abriendo el menú.
     print("=== SISTEMA DE GESTIÓN ACADÉMICA ===")  # Presenta el nombre del proyecto.
     print("Los datos son de ejemplo y solo permanecen durante esta ejecución.")  # Explica el alcance de la sesión.
+    try:  # AC2: demuestra que no se pueden registrar personas sin un rol concreto.
+        Persona("PRUEBA", "Persona genérica", "prueba@example.com")  # Este intento debe producir TypeError por el método abstracto.
+    except TypeError:  # Captura el rechazo esperado y permite iniciar normalmente el sistema.
+        print("Comprobación de abstracción: no se puede crear una Persona directamente.")  # Explica el resultado en español.
     programa_1 = ProgramaAcademico("SIS", "Ingeniería de Sistemas", "Ingeniería", 10)  # Crea el primer programa.
     programa_2 = ProgramaAcademico("ADM", "Administración de Empresas", "Ciencias Económicas", 8)  # Crea el segundo programa.
     programas = [programa_1, programa_2]  # Mantiene juntos los dos programas de esta sesión.
@@ -418,7 +423,7 @@ def main():  # Coordina una única ejecución del sistema, cargando los objetos 
     ]  # Completa la colección con las seis personas exigidas.
     # AC2: los grupos reutilizan asignaturas y docentes existentes y crean horarios propios.
     grupo_1 = GrupoAcademico(  # Construye el primer grupo de ejemplo.
-        "G001", asignatura_1, docente_1, 30,  # Identificador, objetos relacionados y capacidad máxima.
+        "G001", asignatura_1, docente_1, 1,  # AC2: un cupo permite comprobar fácilmente el límite con los estudiantes precargados.
         "Lunes", "08:00", "10:00", "A101",  # Datos con los que el grupo construye su Horario.
     )  # Finaliza la creación del primer grupo sin estudiantes matriculados.
     grupo_2 = GrupoAcademico(  # Construye el segundo grupo de ejemplo.
@@ -426,10 +431,12 @@ def main():  # Coordina una única ejecución del sistema, cargando los objetos 
         "Martes", "10:00", "12:00", "B202",  # Define un horario propio para el segundo grupo.
     )  # Finaliza la creación del segundo grupo sin estudiantes matriculados.
     grupos = [grupo_1, grupo_2]  # Conserva ambos grupos durante esta ejecución del sistema.
+    grupo_1.matricular_estudiante(estudiante_1)  # AC2: precarga a Ana mediante el mismo método que valida las matrículas del menú.
+    print("Datos iniciales: G001 tiene 1 cupo ocupado por Ana (E001); G002 está vacío y tiene 25 cupos.")  # Orienta las pruebas manuales documentadas.
     ejecutar_menu(programas, asignaturas, personas, grupos)  # AC2: pasa los grupos y conserva las listas originales.
 
 if __name__ == "__main__":  # Ejecuta main solo al iniciar este archivo y no cuando otro archivo lo importa.
     try:  # Permite terminar ordenadamente si se interrumpe la lectura de teclado.
-        main()  # Inicia el sistema sin mostrar consultas ni ejecutar pruebas automáticas.
+        main()  # Inicia la comprobación de abstracción, carga los ejemplos y abre el menú.
     except (KeyboardInterrupt, EOFError):  # Captura Ctrl+C o el cierre de la entrada de teclado.
         print("\nEjecución interrumpida. Los datos de esta sesión no se guardan.")  # Informa del cierre sin guardar.

@@ -1,92 +1,70 @@
 # Sistema de Gestión Académica
 
-Actividad colaborativa n.º 1 - Programación Orientada a Objetos en Python.
+Actividad Colaborativa 2 — Evolución del Sistema de Gestión Académica. Programación 1, Universidad de Manizales.
 
-Versión inicial funcional para estudiar, revisar y adaptar en equipo. Primero se ejecuta una demostración automática y después se abre un menú interactivo. Ambos trabajan con los mismos objetos: no son dos programas separados.
+El proyecto amplía el sistema de la Actividad Colaborativa 1 con una clase Persona abstracta, grupos académicos, horarios mediante composición y matrícula con excepciones personalizadas. Funciona en consola y permite comprobar los casos de la actividad con datos precargados y las opciones del menú.
 
-## Integrantes
+## Integrante
 
-Completar con los nombres reales antes de entregar. El equipo puede tener hasta cinco integrantes; eliminar los espacios que no se utilicen.
+**Diego Andrés Echeverry Giraldo**.
 
-1. Pendiente.
-2. Pendiente.
-3. Pendiente.
-4. Pendiente.
-5. Pendiente.
+## Ejecución
 
-## Descripción general
+Se requiere Python 3. No es necesario instalar paquetes externos: `abc`, `datetime` y `math` pertenecen a la biblioteca estándar.
 
-El sistema representa personas de una universidad, programas académicos y asignaturas. Distingue estudiantes, docentes y administrativos mediante herencia, permite modificaciones controladas y genera un reporte conjunto usando polimorfismo.
-
-Funciona en consola. Los datos se conservan en listas y objetos durante la ejecución. No utiliza base de datos ni guarda registros en archivos. Al salir, se pierden las altas y modificaciones realizadas; al ejecutarlo nuevamente, se recrean los datos de ejemplo.
-
-Los nombres y registros iniciales son ficticios. Las duraciones, créditos y demás valores no representan una oferta académica real.
-
-## Estructura de archivos
-
-```text
-sistema_gestion_academica/
-    main.py
-    persona.py
-    programa_academico.py
-    asignatura.py
-    estudiante.py
-    docente.py
-    administrativo.py
-    entradas.py
-    README.md
-    PRUEBAS_MANUALES.md
-    EJEMPLO_EJECUCION.txt
-    .gitignore
-```
-
-| Archivo | Responsabilidad |
-| --- | --- |
-| `main.py` | Crea los objetos de ejemplo, realiza las pruebas, genera consultas y administra el menú. |
-| `persona.py` | Define Persona con identificación, nombre, correo y comportamientos comunes. |
-| `programa_academico.py` | Define ProgramaAcademico con código, nombre, facultad y número de semestres. |
-| `asignatura.py` | Define Asignatura con código, nombre, créditos y una referencia a su programa. |
-| `estudiante.py` | Define Estudiante, que hereda de Persona y agrega código estudiantil, programa, semestre y promedio acumulado. |
-| `docente.py` | Define Docente, que hereda de Persona y agrega número de empleado, facultad, contratación y horas semanales. |
-| `administrativo.py` | Define Administrativo, que hereda de Persona y agrega número de empleado, dependencia, cargo y jornada. |
-| `entradas.py` | Contiene funciones de lectura de teclado y validación de entradas. No contiene otra aplicación ni otro menú. |
-| `PRUEBAS_MANUALES.md` | Explica cómo comprobar el sistema desde el menú. |
-| `EJEMPLO_EJECUCION.txt` | Contiene una salida real de la demostración seguida de la opción de salir. No es código ejecutable. |
-| `.gitignore` | Indica qué archivos temporales y configuraciones locales no deben subirse al repositorio. |
-
-Cada clase incluye su propio método `__init__()`. Los inicializadores no se guardan en archivos separados de sus clases. Todas las líneas con código Python tienen un comentario explicativo; las líneas vacías se utilizan para separar secciones.
-
-## Requisitos y ejecución
-
-Se necesita Python 3. El proyecto fue probado con Python 3.13.5. No requiere instalar paquetes externos; `math` pertenece a la biblioteca estándar de Python.
-
-Extraer toda la carpeta del ZIP. Abrir una terminal dentro de `sistema_gestion_academica`, donde se encuentra `main.py`, y ejecutar:
+Desde una terminal situada en la carpeta que contiene todos los archivos `.py`, ejecutar:
 
 ```bash
 python main.py
 ```
 
-En Windows, cuando Python esté disponible mediante el lanzador `py`, también puede ejecutarse:
+En Windows, si se utiliza el lanzador de Python, ejecutar `py main.py`. Se necesita una terminal con entrada de teclado. Al iniciar se muestra el rechazo controlado de una Persona genérica, se crean los datos de ejemplo y se abre el menú principal.
 
-```bash
-py main.py
-```
+Los datos solo existen durante la ejecución: al cerrar se pierden las matrículas, retiros, registros y modificaciones realizados. Al reiniciar se recuperan los ejemplos iniciales. Los nombres y valores son ficticios.
 
-No ejecutar solamente un archivo de clase esperando que aparezca el menú. El punto de entrada del proyecto es `main.py` y los demás archivos deben permanecer junto a él. Para usar el menú se necesita una terminal que acepte entrada de teclado.
+## Archivos del proyecto
 
-## Funcionamiento
+| Archivo | Responsabilidad |
+| --- | --- |
+| `main.py` | Carga los ejemplos, comprueba la abstracción, administra menús y búsquedas, y captura excepciones. |
+| `persona.py` | Clase abstracta con identificación, nombre, correo y método abstracto de actividad. |
+| `estudiante.py` | Especialización de Persona con código, programa, semestre y promedio. |
+| `docente.py` | Especialización de Persona con información laboral y actividad docente. |
+| `administrativo.py` | Especialización de Persona con dependencia, cargo y jornada. |
+| `programa_academico.py` | Programa con código, nombre, facultad y duración en semestres. |
+| `asignatura.py` | Asignatura con código, nombre, créditos y referencia a su programa. |
+| `horario.py` | Día, hora de inicio, hora de finalización y salón. |
+| `grupo_academico.py` | Oferta de asignatura, docente, capacidad, horario y estudiantes matriculados. |
+| `excepciones.py` | Cinco clases de excepciones personalizadas. |
+| `entradas.py` | Lecturas de teclado, validación de entradas y navegación de regreso. |
+| `README.md` | Descripción, decisiones principales y guía de comprobación. |
+| `.gitignore` | Exclusión de archivos temporales del repositorio. |
 
-### Demostración automática
+Los módulos Python deben permanecer juntos. En la entrega del repositorio, este README se ubica en la raíz, junto a `main.py`. Los scripts auxiliares de preparación y verificación usados durante el desarrollo no son necesarios para ejecutar ni comprobar el sistema.
 
-Al iniciar, el programa crea dos programas académicos, dos asignaturas y seis personas: dos estudiantes, dos docentes y dos administrativos.
+## Datos iniciales
 
-Luego consulta los programas y asignaturas, modifica correctamente un correo, una duración y una cantidad de créditos, y ejecuta tres intentos inválidos: correo vacío, cero semestres y créditos negativos. Finalmente, presenta los datos y actividades de las seis personas con el recorrido polimórfico.
+Se crean dos programas: SIS (Ingeniería de Sistemas, 10 semestres) y ADM (Administración de Empresas, 8 semestres). Las asignaturas son PROG1 (Programación I, 3 créditos, SIS) y ADMI1 (Fundamentos de Administración, 3 créditos, ADM).
 
-Los mensajes **Rechazo esperado** son parte de las pruebas, no fallos inesperados. El resultado **True** en las verificaciones de conservación indica que el dato válido anterior no cambió.
+| Tipo | Nombre | Identificación | Código estudiantil o número de empleado |
+| --- | --- | --- | --- |
+| Estudiante | Ana Torres | 1001 | E001 |
+| Estudiante | Luis Rivera | 1002 | E002 |
+| Docente | Laura Gómez | 2001 | D001 |
+| Docente | Carlos Rojas | 2002 | D002 |
+| Administrativo | Marta Ruiz | 3001 | A001 |
+| Administrativo | Jorge Vera | 3002 | A002 |
 
-Los cambios válidos de la demostración permanecen al entrar al menú: Ana queda con `ana.actualizada@example.com`, el programa `SIS` con 9 semestres y `PROG1` con 4 créditos.
+Ana cursa SIS y Luis cursa ADM. Las seis personas se conservan en una misma lista para el reporte polimórfico.
 
-### Menú interactivo
+| Grupo | Asignatura | Docente | Horario | Salón | Capacidad | Matrículas al iniciar |
+| --- | --- | --- | --- | --- | --- | --- |
+| G001 | PROG1 | Laura Gómez | Lunes 08:00–10:00 | A101 | 1 | Ana Torres, E001 |
+| G002 | ADMI1 | Carlos Rojas | Martes 10:00–12:00 | B202 | 25 | Ninguna |
+
+El único cupo de G001 es una decisión didáctica para comprobar el rechazo por capacidad con los datos existentes. La matrícula inicial de Ana se realiza mediante `matricular_estudiante()`, utilizando las mismas reglas que el menú. G002 permite demostrar una matrícula correcta sin liberar previamente un cupo.
+
+## Menús y uso
 
 ```text
 1. Consultar programas académicos
@@ -96,139 +74,124 @@ Los cambios válidos de la demostración permanecen al entrar al menú: Ana qued
 5. Registrar asignatura
 6. Registrar estudiante, docente o administrativo
 7. Modificar datos
+8. Gestionar grupos académicos
 0. Salir
 ```
 
-La opción 6 abre una selección entre estudiante, docente y administrativo. Las personas nuevas se agregan a la misma lista de las seis personas iniciales y aparecen al consultar la opción 3.
+La opción 7 permite modificar correo, semestres de un programa y créditos de una asignatura. La opción 8 abre:
 
-Para registrar una asignatura o un estudiante se debe seleccionar un programa existente por su código. Puede registrarse primero un nuevo programa mediante la opción 4 y utilizarlo enseguida. Un código inexistente cancela ese registro y devuelve el control al menú.
+```text
+1. Consultar grupos y horarios
+2. Matricular un estudiante
+3. Retirar un estudiante
+0. Volver al menú principal
+```
 
-La opción 7 permite modificar **correo de una persona, número de semestres de un programa y créditos de una asignatura**. No incluye la edición de todos los atributos ni la eliminación de registros. Los demás datos se ingresan al crear el objeto y se consultan mediante sus métodos.
+Para matricular se elige el código del grupo y la **identificación** del estudiante (1001 o 1002). Para retirar se utiliza el **código estudiantil** (E001 o E002). El retiro elimina solo la matrícula del grupo: la persona permanece registrada. En esas selecciones, 0 permite cancelar. Después de un resultado, 0 regresa al menú que abrió la operación. Para consultar grupos desde el menú principal se elige 8 y luego 1.
 
-## Conceptos de POO aplicados
+Los grupos se precargan en `main.py`; el menú no permite crear grupos nuevos. Se pueden registrar personas, asignaturas y programas mediante las opciones existentes. Las selecciones de programa y asignatura convierten el código a mayúsculas; si no existe, muestran el error y repiten la solicitud. Los códigos de grupo y de retiro deben escribirse exactamente como aparecen.
 
-### Clases, objetos e inicializadores
+## Diseño y cuatro fases de la actividad
 
-Una clase describe los datos y comportamientos de un tipo de elemento. Un objeto es un ejemplar concreto: `programa_1` es un objeto de ProgramaAcademico y `estudiante_1` es un objeto de Estudiante.
+### Abstracción y herencia
 
-En la actividad se denomina constructor al método `__init__()`, cuya tarea es inicializar los atributos de cada objeto. `self` permite referirse al objeto que está ejecutando el método.
+`Persona` hereda de `ABC` y declara `realizar_actividad_principal()` con `@abstractmethod`. No se pueden crear objetos Persona directamente. El intento de `main()` produce un TypeError controlado, distinto de las cinco excepciones personalizadas.
 
-### Encapsulamiento
+Estudiante, Docente y Administrativo reutilizan identificación, nombre y correo mediante `super().__init__()`. Cada clase implementa su actividad: cursar un programa, orientar clases o desempeñar el cargo administrativo. También amplía `mostrar_informacion()` para presentar sus datos particulares.
 
-Los atributos se definen con dos guiones bajos iniciales, como `__correo`. Los métodos de consulta tienen nombres como `get_correo()` y los de modificación como `set_correo()`.
+### Oferta académica y encapsulamiento
 
-El programa principal consulta y modifica estos datos mediante los métodos de las clases. Los métodos de modificación comprueban el dato antes de asignarlo; si es inválido, conservan el anterior. Los inicializadores de Persona, ProgramaAcademico y Asignatura reutilizan estas validaciones.
+`GrupoAcademico` recibe objetos ya creados de Asignatura y Docente, conserva sus referencias y mantiene una lista de objetos Estudiante. Incluye `mostrar_informacion_grupo()`, `mostrar_estudiantes()`, `matricular_estudiante(estudiante)` y `retirar_estudiante(codigo_estudiantil)`.
 
-En Python, los dos guiones bajos dificultan el acceso accidental mediante un cambio interno del nombre; no constituyen una barrera de seguridad absoluta. El proyecto respeta el acceso controlado mediante sus métodos.
+Los atributos con doble guion bajo se consultan mediante getters. `get_estudiantes()` devuelve una copia de la lista para evitar cambios externos a la colección interna. El doble guion bajo dificulta el acceso accidental mediante el cambio interno de nombre; no constituye una barrera de seguridad absoluta.
 
-### Herencia
+### Composición del horario
 
-Estudiante, Docente y Administrativo heredan de Persona. `super().__init__()` permite reutilizar la inicialización de identificación, nombre y correo. Cada clase hija agrega solamente sus datos particulares.
+El constructor del grupo crea su propio objeto Horario con día, horas y salón, y lo conserva como componente. Un grupo **tiene un horario**; no es un tipo de horario, por lo que esta relación corresponde a composición y no a herencia. Cada grupo crea un horario distinto. En cambio, Asignatura y Docente se reciben desde fuera y pueden relacionarse con varios grupos.
 
-### Sobreescritura
+Las horas se reciben como texto, se convierten a objetos `time` y se presentan como HH:MM. El final debe ser posterior al inicio dentro del mismo día. La composición describe el diseño: Python no elimina un objeto mientras existan otras referencias a él.
 
-Las tres clases hijas tienen sus propias versiones de `mostrar_informacion()` y `realizar_actividad_principal()`. En la presentación, `super().mostrar_informacion()` reutiliza los datos comunes; después se muestran los particulares.
+### Excepciones y continuidad
 
-### Polimorfismo
+| Excepción | Dónde se lanza | Condición | Dónde se captura |
+| --- | --- | --- | --- |
+| `EstudianteYaMatriculadoError` | `GrupoAcademico.matricular_estudiante()` | El código estudiantil ya está en el grupo. | `gestionar_grupos()` en main.py. |
+| `GrupoLlenoError` | `GrupoAcademico.matricular_estudiante()` | La ocupación alcanzó la capacidad. | `gestionar_grupos()` en main.py. |
+| `EstudianteNoMatriculadoError` | `GrupoAcademico.retirar_estudiante()` | El código no está matriculado en ese grupo. | `gestionar_grupos()` en main.py. |
+| `AsignaturaNoEncontradaError` | `buscar_asignatura()` | No se encuentra el código solicitado. | `seleccionar_asignatura()` en main.py. |
+| `ProgramaNoEncontradoError` | `buscar_programa()` | No se encuentra el código solicitado. | `seleccionar_programa()` en main.py. |
 
-La lista `personas`, creada en `main()`, contiene los tres tipos de personas intercalados. La función `mostrar_reporte_personas()` la recorre con un único `for` e invoca ambos métodos en cada recorrido. No utiliza condicionales para determinar si el objeto es estudiante, docente o administrativo.
+Cada excepción tiene una clase propia. Las operaciones lanzan el error con `raise`; las funciones de interacción lo capturan con `except`, muestran un mensaje y permiten continuar. Una operación rechazada conserva el estado anterior. La matrícula comprueba primero duplicados y después capacidad: intentar matricular de nuevo a Ana en G001 produce el error de duplicado aunque el grupo esté lleno.
 
-Los condicionales del menú seleccionan una operación o una clase que se va a crear; no clasifican los objetos para ejecutar el reporte. Las comprobaciones de tipo de ciertos datos numéricos tampoco forman parte del recorrido polimórfico.
+Las búsquedas devuelven los objetos existentes; también lanzan sus excepciones si se busca en una colección vacía. La interfaz detecta previamente listas vacías y permite regresar sin solicitar una búsqueda.
 
-### Relaciones entre objetos
+### Polimorfismo conservado
 
-El estudiante y la asignatura guardan el objeto ProgramaAcademico que les corresponde, no una copia de sus datos. Consultan su nombre mediante `get_nombre()`. Esta relación no es herencia: un estudiante cursa un programa, pero no es un programa.
+`mostrar_reporte_personas()` recorre una sola lista y llama a `mostrar_informacion()` y `realizar_actividad_principal()` sin clasificar cada objeto. Python ejecuta la implementación de cada clase. El filtro de estudiantes para matricular usa `isinstance`, pero no altera ese reporte polimórfico.
 
-## Validaciones y alcance
+## Guía de comprobación de los requisitos
 
-La actividad exige impedir correos vacíos, duraciones no positivas y créditos no positivos. Estas comprobaciones están en las clases, no solamente en el menú.
+Iniciar una ejecución nueva y seguir el orden indicado. Cada dato separado por una flecha se introduce por separado, confirmándolo con Enter. Los pasos se realizan desde el menú principal salvo que se indique otra cosa.
 
-Como decisiones adicionales de esta propuesta, el registro por teclado pide textos no vacíos, evita identificaciones de personas repetidas y evita códigos repetidos de programas o asignaturas. Se utilizan enteros positivos para semestres, créditos y horas semanales. El promedio debe ser un número finito no negativo y puede escribirse con punto o coma decimal.
-
-El documento no establece una escala para el promedio ni exige relacionar el semestre actual con el número total de semestres del programa. Por eso no se agrega un tope de promedio ni una comprobación de ese tipo. Tampoco se valida la sintaxis completa de una dirección de correo: en este ejercicio se comprueba que no esté vacía.
-
-Los códigos estudiantiles y números de empleado se almacenan, pero no se comprueba su unicidad en esta versión. No se implementan matrículas, notas por asignatura, cálculo automático del promedio, autenticación ni almacenamiento permanente.
-
-## Manejo de errores y entradas
-
-`input()` lee texto. `int()` lo convierte a entero y `float()` a decimal. `try` y `except ValueError` permiten avisar de una entrada o modificación incorrecta sin cerrar el programa. `raise ValueError(...)` comunica el rechazo desde una clase.
-
-Las funciones de lectura repiten la pregunta cuando el formato es incorrecto. Una modificación rechazada por la clase regresa al menú principal sin alterar el dato anterior. La opción 0 finaliza el programa; Ctrl+C también permite interrumpirlo.
-
-## Pruebas y relación con la actividad
-
-| Fase | Dónde se evidencia |
-| --- | --- |
-| 1. Modelado inicial | Persona, ProgramaAcademico y Asignatura; creación y consulta de objetos en main. |
-| 2. Protección y modificación | Atributos encapsulados, métodos de consulta y modificación, función demostrar_modificaciones. |
-| 3. Diferenciación de personas | Estudiante, Docente y Administrativo heredan de Persona. |
-| 4. Comportamientos particulares | Las clases hijas sobrescriben los dos métodos solicitados. |
-| 5. Procesamiento conjunto | Una lista con seis personas y un único ciclo en mostrar_reporte_personas. |
-
-Las pruebas mínimas se ejecutan al iniciar `main.py`; no hace falta ejecutar otro programa. `PRUEBAS_MANUALES.md` contiene ejercicios adicionales para probar las entradas del menú.
-
-La versión preparada fue verificada en un entorno de Python 3.13.5 mediante ejecución de la demostración, registro manual simulado de los tres tipos de personas, consultas, modificaciones válidas e inválidas, rechazo de duplicados y reinicio sin persistencia. El equipo debe repetir las pruebas en su propio entorno y registrar su revisión real.
-
-## Entrega y trabajo en equipo
-
-Subir la carpeta del proyecto a un único repositorio de GitHub y compartir el enlace real de ese repositorio. No entregar solamente el ZIP en lugar del enlace exigido por la actividad.
-
-Cada integrante debe aportar como mínimo un commit relacionado con un trabajo real de desarrollo. Los nombres, aportes y revisiones del equipo no se han completado ni simulado en este material.
-
-Identificar la versión entregada con una etiqueta, por ejemplo `entrega-actividad-1`. Conservar esa versión sin cambios y realizar la evolución posterior del mismo proyecto en commits posteriores a la etiqueta, según las condiciones de la actividad. El historial de desarrollo no se crea automáticamente al recibir estos archivos.
-
-## Declaración de uso de inteligencia artificial
-
-Se utilizó ChatGPT como apoyo para interpretar los requisitos, proponer la organización del sistema y generar, comentar y verificar esta versión inicial del código y su documentación.
-
-Antes de entregar, el equipo debe revisar el material, comprenderlo, adaptarlo cuando corresponda y documentar sus propias contribuciones. Esta declaración debe mantenerse y actualizarse para reflejar el uso real de la herramienta. No debe afirmarse una revisión humana ni una participación que no se haya realizado.
-
-## Documento base
-
-Requisitos tomados de **Actividad colaborativa N°1. Construcción de un Sistema de Gestión Académica utilizando Programación Orientada a Objetos**, Universidad de Manizales, documento proporcionado para esta actividad: fases 1 a 5, pruebas mínimas, entregables y uso de herramientas de inteligencia artificial.
-
-El menú, la entrada de datos y los comentarios en cada línea se incorporaron por solicitud adicional del estudiante. No se presentan como exigencias literales del documento universitario.
-
-
-## Actividad Colaborativa 2 — avance de grupos y horarios
-
-Este apartado actualiza el estado del proyecto y conserva arriba el documento anterior como referencia. Las menciones anteriores a una demostración automática, a `demostrar_modificaciones` y a pruebas que se ejecutan al iniciar no describen el código actual: `main.py` carga los ejemplos y abre el menú. Las búsquedas de códigos inexistentes repiten la solicitud; no cancelan automáticamente el registro. Los nombres de integrantes siguen pendientes de completar por el equipo.
-
-### Alcance de este avance
-
-Se conserva la abstracción de Persona incorporada en el primer avance de AC2. Se agregan Horario y GrupoAcademico, dos grupos iniciales y la opción 8 para consultarlos. Las opciones 1 a 7 y 0 conservan sus funciones. Matrícula, retiro y excepciones personalizadas quedan pendientes del siguiente avance; esta no es todavía la entrega final AC2.
-
-`Horario` contiene día, hora inicial, hora final y salón. Recibe las horas como texto HH:MM de 24 horas y las guarda como objetos `time`. Valida los datos y exige que el final sea posterior al inicio dentro del mismo día. No contempla sesiones que atraviesen medianoche ni verifica cruces de horarios.
-
-`GrupoAcademico` recibe objetos Asignatura y Docente ya creados y conserva esas referencias. Valida código y capacidad positiva, inicia una lista propia de estudiantes y crea internamente su Horario. Los getters permiten consultar sus datos; `get_estudiantes()` devuelve una copia de la lista para evitar modificaciones externas de la colección.
-
-El grupo contiene un horario como componente de su organización: esta relación es composición. El constructor del grupo crea ese objeto y lo conserva como atributo; el grupo no hereda de Horario porque un grupo no es un horario. Las referencias de Asignatura y Docente se reciben desde fuera y pueden utilizarse en otros grupos. Esta decisión de diseño no implica que Python destruya un horario mientras otra referencia externa todavía lo conserve.
-
-### Integración en el código original y líneas
-
-Las líneas corresponden a los archivos de este avance; futuras adiciones pueden desplazarlas. No se eliminaron funciones, opciones, datos iniciales ni validaciones del código original. Se ampliaron dos líneas existentes: la firma de `ejecutar_menu` y su llamada en `main`. El argumento opcional `grupos=None` conserva la compatibilidad con llamadas de tres argumentos.
-
-| Archivo | Líneas actuales | Cambio |
+| Caso | Pasos | Resultado esperado |
 | --- | --- | --- |
-| `main.py` | 7–7 | Adición |
-| `main.py` | 210–222 | Ampliación de línea existente |
-| `main.py` | 232–232 | Adición |
-| `main.py` | 250–251 | Adición |
-| `main.py` | 333–343 | Ampliación de línea existente |
-| `horario.py` | 1–39 | Archivo nuevo, con comentarios explicativos |
-| `grupo_academico.py` | 1–56 | Archivo nuevo, con comentarios explicativos |
+| Persona abstracta | Iniciar `main.py`. | Mensaje de que no se puede crear una Persona directamente; después aparece el menú. |
+| Objetos y dos grupos con horarios | 1 → 0, después 2 → 0, después 3 → 0 y después 8 → 1 → 0 → 0. | Dos programas, dos asignaturas, seis personas y dos grupos con los horarios indicados. G001 tiene a Ana y G002 está vacío. |
+| Matrícula duplicada | 8 → 2 → G001 → 1001 → 0 → 0. | Rechazo porque E001 ya está en G001; la ocupación sigue siendo 1. |
+| Capacidad superada | 8 → 2 → G001 → 1002 → 0 → 0. | Rechazo porque G001 está lleno; Luis no se agrega. |
+| Matrícula correcta | 8 → 2 → G002 → 1002 → 0 → 1 → 0 → 0. | Confirmación de matrícula; la consulta muestra a Luis en G002. |
+| Retiro correcto | 8 → 3 → G001 → E001 → 0 → 1 → 0 → 0. | Confirmación de retiro; G001 queda vacío. Ana sigue en el reporte de personas. |
+| Retiro inexistente | 8 → 3 → G001 → E001 → 0 → 0. | Rechazo porque Ana ya no está matriculada en G001; se mantiene vacío. |
+| Asignatura inexistente | 7 → 3 → NOEXISTE → PROG1 → 3 → 0 → 0. | Error de asignatura, seguido de una nueva solicitud. Se elige PROG1 y se conservan sus 3 créditos. |
+| Programa inexistente | 7 → 2 → NOEXISTE → SIS → 10 → 0 → 0. | Error de programa, seguido de una nueva solicitud. Se elige SIS y se conservan sus 10 semestres. |
+| Continuidad y polimorfismo | 3 → 0 y finalmente 0 para salir. | Se muestran las seis personas y sus actividades; el programa termina por elección del usuario. |
 
-Las adiciones de `main.py` incorporan la importación de GrupoAcademico, la función `mostrar_grupos`, el argumento de grupos, la opción 8 y su atención, y la creación de G001 y G002 con horarios propios. Se conservan los comentarios originales y se documenta la ampliación con comentarios AC2.
+Todos los casos se ejecutan desde el archivo principal y sus menús. Solo la comprobación de abstracción y la carga de ejemplos ocurren automáticamente; los cinco errores personalizados se provocan siguiendo esta guía. Para repetir desde el estado inicial, cerrar y volver a ejecutar.
 
-### Comprobación manual
+## Validaciones y límites
 
-Ejecutar `python main.py` desde la carpeta del proyecto. Elegir 8: deben aparecer G001 (Programación I, Laura Gómez, lunes 08:00–10:00, A101, capacidad 30) y G002 (Fundamentos de Administración, Carlos Rojas, martes 10:00–12:00, B202, capacidad 25). Ambos deben indicar cero estudiantes. Elegir 0 para volver; elegir 3 para consultar el reporte polimórfico y 0 para regresar. Finalmente, elegir 0 para salir.
+- Se rechazan correos vacíos, créditos y semestres no positivos, y horas laborales no positivas. El promedio debe ser finito y no negativo; no se impone una escala máxima.
+- El registro evita identificaciones de personas repetidas y códigos de programas y asignaturas repetidos. No comprueba la unicidad global de códigos estudiantiles o números de empleado; la matrícula sí evita repetir un código estudiantil dentro de un grupo.
+- GrupoAcademico exige una asignatura y un docente del tipo correspondiente, capacidad entera positiva y código no vacío. Horario exige día y salón no vacíos y horas válidas ordenadas.
+- No se comprueban cruces de horarios, nombres de días, pertenencia del estudiante al programa de la asignatura ni sesiones que atraviesen medianoche.
+- No se incluyen notas por asignatura, cálculo de promedios, autenticación, base de datos ni almacenamiento permanente. Ctrl+C o el fin de entrada cierran la sesión con un aviso.
 
-### Uso de inteligencia artificial en este avance
+## Entrega y versiones
 
-Se utilizó Codex como apoyo para añadir y comentar las clases, integrar la consulta en el menú y preparar verificaciones. El equipo debe revisar y comprender estos cambios. Esta nota también deberá incorporarse al Documento de Decisiones de Diseño cuando se elabore.
+Repositorio: [DRAKNED/sistema-gestion-academica](https://github.com/DRAKNED/sistema-gestion-academica).
 
-### Verificación realizada en este avance
+El repositorio contiene el proyecto ejecutable y este README. Conforme a la organización de entrega indicada por el estudiante, el Documento de Decisiones de Diseño y los soportes adicionales se presentan por separado en la plataforma de la universidad.
 
-Se comprobó la consulta de los dos grupos y sus listas vacías, las referencias a los objetos originales, los horarios independientes, la protección de la lista interna y el rechazo de horas, capacidades y referencias inválidas. También se ejecutaron consultas anteriores, el reporte de seis personas, la navegación por los submenús de registro y modificación, y la salida. Las funciones originales distintas de main y ejecutar_menu se compararon estructuralmente y permanecen iguales.
+`Entrega_AC1` identifica la primera entrega y debe conservarse. `Entrega_AC2` identificará el commit final una vez publicado y revisado; este documento no afirma que esa etiqueta ya se haya creado. El desarrollo es individual y los commits deben reflejar los aportes de Diego Andrés Echeverry Giraldo.
 
+## Uso de inteligencia artificial
+
+Se utilizaron ChatGPT y Codex como apoyo para comprender los requisitos, proponer el diseño, generar y comentar código, revisar errores, preparar pruebas y consolidar la documentación. La comprensión y sustentación del trabajo corresponden al estudiante. Esta declaración también debe figurar en el Documento de Decisiones de Diseño entregado por separado.
+
+## Registro de cambios y ubicación en el código
+
+La versión conserva las funciones de la Actividad 1 y añade abstracción, grupos y horarios, cinco excepciones y gestión de matrícula. La opción 8 pasó de consulta directa a submenú, conservando la consulta dentro de su opción 1. Las búsquedas anteriores se ampliaron con captura de excepciones. Este README reemplaza las notas acumuladas de avances para describir un único estado actual del sistema.
+
+| Archivo | Líneas actuales | Elemento añadido o ampliado para AC2 |
+| --- | --- | --- |
+
+| `main.py` | 35–39 | `buscar_programa()` |
+| `main.py` | 41–45 | `buscar_asignatura()` |
+| `main.py` | 47–62 | `seleccionar_programa()` |
+| `main.py` | 64–79 | `seleccionar_asignatura()` |
+| `main.py` | 228–235 | `mostrar_grupos()` |
+| `main.py` | 237–250 | `seleccionar_grupo()` |
+| `main.py` | 252–266 | `seleccionar_estudiante()` |
+| `main.py` | 268–304 | `gestionar_grupos()` |
+| `main.py` | 307–346 | `ejecutar_menu()` |
+| `main.py` | 348–436 | `main()` |
+| `persona.py` | 1–33 | Clase Persona abstracta y método abstracto. |
+| `horario.py` | 1–39 | Clase o excepciones añadidas para AC2 |
+| `grupo_academico.py` | 1–76 | Clase o excepciones añadidas para AC2 |
+| `excepciones.py` | 1–17 | Clase o excepciones añadidas para AC2 |
+
+En este último ajuste se añadió la importación de Persona, el intento controlado de instanciación al inicio y la matrícula inicial de Ana. Se cambió únicamente la capacidad de ejemplo de G001 de 30 a 1; G002 conserva 25 cupos. Las demás funciones y opciones del avance anterior se mantienen. Las líneas indicadas corresponden a esta versión y pueden desplazarse con futuras ediciones.
+
+Las adiciones de este último avance en main.py se encuentran en la línea 3 (importación), 351–354 (intento controlado de crear Persona), 426 (capacidad de G001) y 434–435 (matrícula inicial y aviso).
+
+La secuencia completa de la guía se verificó mediante entradas de teclado simuladas: se comprobaron los datos iniciales, las cinco excepciones, las operaciones correctas y la continuidad. Las funciones anteriores fuera de main se compararon estructuralmente y se conservaron.
