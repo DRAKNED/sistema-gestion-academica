@@ -4,6 +4,7 @@ from programa_academico import ProgramaAcademico  # Importa la clase que represe
 from asignatura import Asignatura  # Importa la clase que representa las asignaturas.
 from estudiante import Estudiante  # Importa la clase hija que representa los estudiantes.
 from docente import Docente  # Importa la clase hija que representa los docentes.
+from excepciones import EstudianteYaMatriculadoError, GrupoLlenoError, EstudianteNoMatriculadoError  # AC2: rechazos de matrícula y retiro.
 from grupo_academico import GrupoAcademico  # AC2: incorpora los grupos que crean su propio horario.
 from administrativo import Administrativo  # Importa la clase hija que representa los administrativos.
 from entradas import leer_texto, leer_entero, leer_entero_positivo, leer_promedio  # Importa las lecturas de teclado.
@@ -217,6 +218,76 @@ def mostrar_grupos(grupos):  # Presenta los grupos, sus horarios y sus estudiant
         grupo.mostrar_estudiantes()  # Informa el estado de las matrículas del grupo.
     esperar_volver()  # Conserva la misma navegación de las consultas anteriores.
 
+def seleccionar_grupo(grupos):  # AC2: permite elegir un grupo existente o cancelar la operación.
+    if not grupos:  # Evita solicitar códigos cuando la colección está vacía.
+        print("No hay grupos académicos registrados.")  # Explica por qué no se puede continuar.
+        return None  # Señala que no se seleccionó un grupo.
+    for grupo in grupos:  # Presenta los identificadores disponibles.
+        print(grupo.get_codigo(), "-", grupo.get_asignatura().get_nombre())  # Consulta los objetos existentes.
+    while True:  # Permite corregir un código inexistente.
+        codigo = leer_texto("Código del grupo (0 para cancelar)")  # Lee el identificador sin modificar los códigos registrados.
+        if codigo == "0":  # Ofrece una salida del proceso de selección.
+            return None  # Cancela sin modificar matrículas.
+        for grupo in grupos:  # Busca una coincidencia exacta con el código mostrado.
+            if grupo.get_codigo() == codigo:  # Identifica el grupo seleccionado.
+                return grupo  # Devuelve el mismo objeto almacenado en la colección.
+        print("No se encontró ese grupo. Intenta de nuevo.")  # Mantiene abierta la selección.
+
+def seleccionar_estudiante(personas):  # AC2: obtiene un estudiante registrado sin alterar el reporte polimórfico.
+    estudiantes = [persona for persona in personas if isinstance(persona, Estudiante)]  # Excluye docentes y administrativos de la matrícula.
+    if not estudiantes:  # Comprueba que existan estudiantes disponibles.
+        print("No hay estudiantes registrados.")  # Orienta al usuario a registrar uno desde el menú principal.
+        return None  # Cancela la selección vacía.
+    for estudiante in estudiantes:  # Muestra códigos e identificaciones para distinguir registros.
+        print(estudiante.get_identificacion(), "-", estudiante.get_codigo_estudiantil(), "-", estudiante.get_nombre())  # Usa la identificación, que el registro ya exige única.
+    while True:  # Permite corregir una identificación inválida.
+        identificacion = leer_texto("Identificación del estudiante (0 para cancelar)")  # Selecciona por identificación para evitar ambigüedad entre códigos repetidos.
+        if identificacion == "0":  # Permite abandonar la selección.
+            return None  # Conserva las matrículas anteriores.
+        for estudiante in estudiantes:  # Busca únicamente entre objetos Estudiante.
+            if estudiante.get_identificacion() == identificacion:  # Localiza a la persona solicitada.
+                return estudiante  # Devuelve el objeto existente, sin crear una copia.
+        print("No se encontró ese estudiante. Intenta de nuevo.")  # Solicita otra identificación.
+
+def gestionar_grupos(grupos, personas):  # AC2: reúne consultas, matrícula y retiro en el programa principal.
+    while True:  # Conserva el submenú después de cada operación o rechazo.
+        print("\n=== GESTIONAR GRUPOS ACADÉMICOS ===")  # Identifica el submenú actual.
+        print("1. Consultar grupos y horarios")  # Conserva la consulta que antes abría directamente la opción 8.
+        print("2. Matricular un estudiante")  # Ofrece agregar un estudiante existente.
+        print("3. Retirar un estudiante")  # Ofrece liberar un cupo por código estudiantil.
+        print("0. Volver al menú principal")  # Permite continuar usando las opciones anteriores.
+        opcion = input("Selecciona una opción: ").strip()  # Lee la acción elegida.
+        if opcion == "0":  # Reconoce la solicitud de volver.
+            return  # Termina únicamente este submenú.
+        if opcion == "1":  # Reutiliza la consulta existente.
+            mostrar_grupos(grupos)  # Incluye las matrículas actualizadas y permite volver.
+            continue  # Presenta nuevamente el submenú después de consultar.
+        if opcion not in ("2", "3"):  # Rechaza opciones desconocidas antes de pedir datos.
+            print("Opción no válida. Selecciona una opción de este menú.")  # Explica el error de navegación.
+            continue  # Repite el submenú sin ejecutar operaciones.
+        grupo = seleccionar_grupo(grupos)  # Obtiene el grupo sobre el que se operará.
+        if grupo is None:  # Detecta una cancelación o la ausencia de grupos.
+            continue  # Regresa al submenú sin modificar datos.
+        try:  # Captura en main.py los errores lanzados por GrupoAcademico.
+            if opcion == "2":  # Atiende una matrícula.
+                estudiante = seleccionar_estudiante(personas)  # Obtiene un objeto de la lista actual de personas.
+                if estudiante is None:  # Detecta cancelación o ausencia de estudiantes.
+                    continue  # Regresa al submenú sin matricular.
+                grupo.matricular_estudiante(estudiante)  # Delega las reglas de duplicados y cupos a la clase.
+                print("Estudiante matriculado correctamente.")  # Confirma solo después de completar la matrícula.
+            else:  # Atiende el retiro, pues la opción 3 ya fue validada.
+                codigo = leer_texto("Código estudiantil que deseas retirar (0 para cancelar)")  # Solicita el identificador de la matrícula.
+                if codigo == "0":  # Permite cancelar sin intentar un retiro.
+                    continue  # Vuelve al submenú.
+                grupo.retirar_estudiante(codigo)  # Delega la búsqueda y la eliminación al grupo.
+                print("Estudiante retirado correctamente.")  # Confirma que el cupo quedó disponible.
+        except (EstudianteYaMatriculadoError, GrupoLlenoError, EstudianteNoMatriculadoError) as error:  # Controla los tres rechazos esperados.
+            print("Operación rechazada:", error)  # Muestra el mensaje y conserva la ejecución.
+        except ValueError as error:  # Controla también el tipo inválido recibido por el método de matrícula.
+            print("Operación rechazada:", error)  # Explica el dato inválido sin cerrar el submenú.
+        esperar_volver()  # Permite leer el resultado antes de volver a gestionar grupos.
+
+
 def ejecutar_menu(programas, asignaturas, personas, grupos=None):  # AC2: añade grupos como argumento opcional.
     if grupos is None:  # Mantiene compatibles las llamadas anteriores que solo pasan tres listas.
         grupos = []  # Usa una lista nueva por llamada cuando no se suministran grupos.
@@ -229,7 +300,7 @@ def ejecutar_menu(programas, asignaturas, personas, grupos=None):  # AC2: añade
         print("5. Registrar asignatura")  # Muestra la opción de crear una asignatura.
         print("6. Registrar estudiante, docente o administrativo")  # Muestra la opción de crear una persona.
         print("7. Modificar datos")  # Muestra la opción de modificar los datos permitidos.
-        print("8. Consultar grupos académicos y horarios")  # AC2: añade la consulta sin renumerar las opciones originales.
+        print("8. Gestionar grupos académicos")  # AC2: permite consultar, matricular y retirar conservando las demás opciones.
         print("0. Salir")  # Muestra la opción que finaliza la ejecución.
         opcion = input("Selecciona una opción: ").strip()  # Lee la opción del usuario como texto.
         try:  # Permite que las clases rechacen datos sin cerrar el programa.
@@ -247,8 +318,8 @@ def ejecutar_menu(programas, asignaturas, personas, grupos=None):  # AC2: añade
                 registrar_persona(programas, personas)  # Agrega el objeto al mismo conjunto de personas.
             elif opcion == "7":  # Identifica la modificación controlada de datos.
                 modificar_datos(programas, asignaturas, personas)  # Actualiza datos mediante métodos de sus clases.
-            elif opcion == "8":  # AC2: atiende la nueva consulta de grupos.
-                mostrar_grupos(grupos)  # Utiliza los grupos de la misma ejecución.
+            elif opcion == "8":  # AC2: abre la gestión de los grupos de esta ejecución.
+                gestionar_grupos(grupos, personas)  # Comparte los objetos existentes con el nuevo submenú.
             elif opcion == "0":  # Identifica la solicitud de terminar la sesión.
                 print("Sistema cerrado. Los datos de esta ejecución no se guardan.")  # Advierte que no hay persistencia.
                 break  # Termina el ciclo del menú y permite finalizar el programa.
